@@ -24,30 +24,40 @@ echo Bundles copiados a Karaf 'deploy/'.
 echo.
 
 echo [3/3] Configurando variables de entorno de Java...
-REM Verificar si hay un JAVA_HOME configurado en el sistema
-if exist "%JAVA_HOME%\bin\java.exe" (
-    echo [INFO] Usando la variable de entorno JAVA_HOME existente: %JAVA_HOME%
-) else if exist "C:\Users\jeanc\AppData\Local\JDownloader 2\jre\bin\java.exe" (
-    echo [INFO] Configurando JAVA_HOME localmente con el JDK de JDownloader...
-    set "JAVA_HOME=C:\Users\jeanc\AppData\Local\JDownloader 2\jre"
-    set "PATH=C:\Users\jeanc\AppData\Local\JDownloader 2\jre\bin;%PATH%"
-) else (
-    where java >nul 2>&1
-    if %ERRORLEVEL% equ 0 (
-        echo [INFO] Java detectado en la variable PATH del sistema.
-    ) else (
-        echo [ALERTA] No se detecto una instalacion de Java (JDK). Apache Karaf podria fallar al iniciar.
-    )
-)
-echo.
 
+REM Caso 1: Verificar si JAVA_HOME esta configurado y es valido
+if "%JAVA_HOME%"=="" goto CHECK_LOCAL
+if not exist "%JAVA_HOME%\bin\java.exe" goto CHECK_LOCAL
+echo [INFO] Usando la variable de entorno JAVA_HOME existente: %JAVA_HOME%
+goto JAVA_OK
+
+:CHECK_LOCAL
+REM Caso 2: Usar JDK local de JDownloader si existe
+if not exist "C:\Users\jeanc\AppData\Local\JDownloader 2\jre\bin\java.exe" goto CHECK_PATH
+echo [INFO] Configurando JAVA_HOME localmente con el JDK de JDownloader...
+set "JAVA_HOME=C:\Users\jeanc\AppData\Local\JDownloader 2\jre"
+set "PATH=C:\Users\jeanc\AppData\Local\JDownloader 2\jre\bin;%PATH%"
+goto JAVA_OK
+
+:CHECK_PATH
+REM Caso 3: Verificar si java ya esta en el PATH
+where java >nul 2>&1
+if %ERRORLEVEL% equ 0 (
+    echo [INFO] Java detectado en la variable PATH del sistema.
+    goto JAVA_OK
+)
+
+echo [ALERTA] No se detecto una instalacion de Java (JDK). Apache Karaf podria fallar al iniciar.
+
+:JAVA_OK
+echo.
 echo =====================================================================
 echo Iniciando Apache Karaf...
 echo.
 echo Instrucciones utiles en la consola de Karaf:
 echo   - Escribe 'bundle:list' para ver los modulos y sus IDs (ej. 53 y 54).
-echo   - Escribe 'bundle:stop <ID>' para detener un modulo.
-echo   - Escribe 'bundle:start <ID>' para iniciar un modulo.
+echo   - Escribe 'bundle:stop ^<ID^>' para detener un modulo.
+echo   - Escribe 'bundle:start ^<ID^>' para iniciar un modulo.
 echo   - Escribe 'system:shutdown -f' para apagar Karaf.
 echo =====================================================================
 echo.
