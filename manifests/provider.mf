@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Greeting Service Provider
+Bundle-SymbolicName: com.example.greeting.provider
+Bundle-Version: 1.0.0
+Bundle-Activator: com.example.greeting.impl.Activator
+Export-Package: com.example.greeting
+Import-Package: org.osgi.framework
+

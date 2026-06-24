@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Greeting Service Consumer
+Bundle-SymbolicName: com.example.greeting.consumer
+Bundle-Version: 1.0.0
+Bundle-Activator: com.example.client.Activator
+Import-Package: org.osgi.framework, org.osgi.util.tracker, com.example.greeting
+
