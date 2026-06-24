@@ -1,0 +1,7 @@
+# Ignore tools and binary files
+tools/
+*.zip
+out/
+*.class
+*.jar
+.DS_Store
